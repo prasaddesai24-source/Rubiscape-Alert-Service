@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Enterprise AI Workflow Alert Monitoring Dashboard — Real-time alert tracking, severity distribution, and service health overview.">
+    <title>Alert Dashboard — Rubiscape Alert Service</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- ── Header ─────────────────────────────────────────── -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <div>
+                    <h1>Rubiscape Alert Service</h1>
+                    <p class="subtitle">Enterprise AI Workflow Monitoring</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="/docs" class="btn btn-outline" target="_blank">📄 API Docs</a>
+                <a href="/dashboard" class="btn btn-primary">🔄 Refresh</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ── Stats Cards ────────────────────────────────── -->
+        <section class="stats-grid" id="stats-section">
+            <div class="stat-card stat-total">
+                <div class="stat-icon">📊</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ total_count }}</span>
+                    <span class="stat-label">Total Alerts</span>
+                </div>
+            </div>
+            {% for level in severity_levels %}
+            <div class="stat-card stat-{{ level | lower }}">
+                <div class="stat-icon">
+                    {% if level == 'CRITICAL' %}🔴{% elif level == 'HIGH' %}🔶{% elif level == 'MEDIUM' %}⚠️{% else
+                    %}ℹ️{% endif %}
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ severity_dist.get(level, 0) }}</span>
+                    <span class="stat-label">{{ level }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+
+        <!-- ── Severity Distribution Bar ──────────────────── -->
+        {% if total_count > 0 %}
+        <section class="distribution-section" id="distribution-section">
+            <h2 class="section-title">Severity Distribution</h2>
+            <div class="distribution-bar">
+                {% for level in severity_levels %}
+                {% set count = severity_dist.get(level, 0) %}
+                {% if count > 0 %}
+                <div class="dist-segment dist-{{ level | lower }}"
+                    style="width: {{ (count / total_count * 100) | round(1) }}%"
+                    title="{{ level }}: {{ count }} ({{ (count / total_count * 100) | round(1) }}%)">
+                    {{ level | truncate(3, True, '') }} {{ count }}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- ── Filter Bar ─────────────────────────────────── -->
+        <section class="filter-bar" id="filter-section">
+            <h2 class="section-title">Alert Log</h2>
+            <div class="filter-controls">
+                <a href="/dashboard" class="filter-btn {% if not current_filter %}active{% endif %}">
+                    All
+                </a>
+                {% for level in severity_levels %}
+                <a href="/dashboard?severity={{ level }}"
+                    class="filter-btn filter-{{ level | lower }} {% if current_filter == level %}active{% endif %}">
+                    {{ level }}
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- ── Alert Table ────────────────────────────────── -->
+        <section class="table-section" id="alerts-table">
+            {% if alerts %}
+            <div class="table-wrapper">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Severity</th>
+                            <th>Service</th>
+                            <th>Message</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for alert in alerts %}
+                        <tr class="alert-row row-{{ alert.severity | lower }}">
+                            <td class="cell-id">#{{ alert.id }}</td>
+                            <td>
+                                <span class="severity-badge badge-{{ alert.severity | lower }}">
+                                    {% if alert.severity == 'CRITICAL' %}🔴{% elif alert.severity == 'HIGH' %}🔶{% elif
+                                    alert.severity == 'MEDIUM' %}⚠️{% else %}ℹ️{% endif %}
+                                    {{ alert.severity }}
+                                </span>
+                            </td>
+                            <td class="cell-service">{{ alert.service_name }}</td>
+                            <td class="cell-message">{{ alert.message }}</td>
+                            <td class="cell-time">{{ alert.created_at.strftime('%Y-%m-%d %H:%M:%S') if alert.created_at
+                                else '—' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">🎯</div>
+                <h3>No Alerts Found</h3>
+                <p>
+                    {% if current_filter %}
+                    No {{ current_filter }} severity alerts recorded.
+                    <a href="/dashboard">View all alerts</a>
+                    {% else %}
+                    No alerts have been generated yet. Send events via
+                    <a href="/docs" target="_blank">the API</a> to trigger alerts.
+                    {% endif %}
+                </p>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <!-- ── Footer ─────────────────────────────────────────── -->
+    <footer class="footer">
+        <p>Rubiscape Alert Service &copy; 2026 &mdash; Enterprise AI Workflow Monitoring</p>
+    </footer>
+</body>
+
+</html>
