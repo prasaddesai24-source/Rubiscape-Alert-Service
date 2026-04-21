@@ -1,17 +1,3 @@
-# 🛡️ Rubiscape Alert Service
-
-**Enterprise AI Workflow Notification & Alerting Service**
-
-A production-ready backend system that monitors AI workflow execution events, evaluates rule-based conditions, generates severity-based alerts, dispatches email notifications, and provides reporting with a web dashboard.
-
----
-
-## 🏗 System Architecture
-
-```
-┌──────────────────────────────────────────────────────────────┐
-│                    CLIENT LAYER                              │
-│  ┌─────────────┐  ┌──────────────┐  ┌────────────────────┐  │
 │  │ Swagger /docs│  │  Dashboard   │  │  External Clients  │  │
 │  └──────┬───────┘  └──────┬───────┘  └────────┬───────────┘  │
 └─────────┼─────────────────┼───────────────────┼──────────────┘
