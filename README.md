@@ -1,4 +1,4 @@
-# 🛡️ Rubiscape Alert Service — v2.5 (Enterprise Intelligence)
+# 🛡️ Alert Service —
 
 **The specialized monitoring and alerting backbone for high-performance AI Workflows.**
 
@@ -11,7 +11,7 @@
 
 ## 🏗️ System Architecture
 
-Rubiscape Alert Service v2.5 utilizes a **Modular Layered Architecture** with integrated AI intelligence and real-time streaming capabilities.
+ Alert Service  utilizes a **Modular Layered Architecture** with integrated AI intelligence and real-time streaming capabilities.
 
 ```mermaid
 graph TD
@@ -39,7 +39,7 @@ graph TD
 
 ---
 
-## ✨ Advanced Features (v2.5)
+## ✨ Advanced Features 
 
 ### 🤖 1. AI & Machine Learning Intelligence
 - **IsolationForest Anomaly Detection:** Automatically flags statistical outliers in metric data, even when manual rules aren't defined.
@@ -118,7 +118,7 @@ python demo.py
 ---
 
 ## 🏢 Business Alignment
-Rubiscape Alert Service is designed for **Enterprise AI Observability**. It bridges the gap between raw execution data and actionable technical insights, ensuring high reliability for critical AI workflows.
+Alert Service is designed for **Enterprise AI Observability**. It bridges the gap between raw execution data and actionable technical insights, ensuring high reliability for critical AI workflows.
 
 ---
 *Rubiscape Alert Service © 2026 — Built for the future of AI Operations.*
